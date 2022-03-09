@@ -3,6 +3,7 @@ package com.ozone.hollidays.services;
 import com.ozone.hollidays.entities.NotificationEmail;
 import com.ozone.hollidays.entities.User;
 import com.ozone.hollidays.entities.VerificationToken;
+import com.ozone.hollidays.exception.HollydaysException;
 import com.ozone.hollidays.repositories.UserRepository;
 import com.ozone.hollidays.repositories.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -48,5 +50,19 @@ public class AuthService {
 
         verificationTokenRepository.save(verificationToken);
         return token;
+    }
+
+    public void verifyAccount(String token) {
+      Optional<VerificationToken> verificationToken =  verificationTokenRepository.findByToken(token);
+      verificationToken.orElseThrow(()-> new HollydaysException("Invalid Token"));
+      fetchUserAndEnable(verificationToken.get());
+    }
+
+    @Transactional
+    void fetchUserAndEnable(VerificationToken verificationToken) {
+        String email = verificationToken.getUser().getEmail();
+       User user =  userRepository.findByEmail(email).orElseThrow(()-> new HollydaysException("User not found"));
+       user.setEnabled(true);
+       userRepository.save(user);
     }
 }

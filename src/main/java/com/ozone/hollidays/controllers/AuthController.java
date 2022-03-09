@@ -6,10 +6,9 @@ import com.ozone.hollidays.services.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import static java.time.LocalDateTime.now;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
+
 import static org.springframework.http.HttpStatus.OK;
 import java.util.Map;
 
@@ -35,4 +34,19 @@ public class AuthController {
                         .build()
         );
     }
+
+    @GetMapping("/accountVerification/{token}")
+    public  ResponseEntity<Response> verifyAccount(@PathVariable String token){
+        authService.verifyAccount(token);
+        return  ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .message("Account Activated Successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+
 }
