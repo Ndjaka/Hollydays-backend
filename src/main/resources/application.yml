@@ -1,0 +1,52 @@
+
+hollidays:
+  springboot:
+    # The Camel context name
+    name: Hollydays backend
+
+logging:
+  level:
+    root: INFO
+
+mysql:
+  service:
+    # The name of the service hosting the MySQL database server,
+    # can be customized using the 'MYSQL_SERVICE_NAME' env variable to use a different service
+    name:     mysql
+    # The database to use, can be customized using the 'MYSQL_SERVICE_DATABASE' env variable
+    database: hollydaysdb
+    port: 3306
+    host: localhost
+    username: root
+    password:
+
+
+spring:
+  # Spring JDBC configuration
+  datasource:
+    url:      jdbc:mysql://${mysql.service.host}:${mysql.service.port}/${mysql.service.database}
+    username: ${mysql.service.username}
+    password: ${mysql.service.password}
+
+  # Spring Data JPA configuration
+  jpa:
+    flyway:
+      validate-on-migrate: true
+      enabled: true
+
+    hibernate:
+      # To be updated in real production usage!
+      ddl-auto: validate
+    show-sql: false
+
+
+  #mail properties
+
+  #default configuration
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: eadc48f2f6c24f
+    password: 6021821c2967fb
+    protocol: smtp
+
