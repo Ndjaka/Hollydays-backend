@@ -1,15 +1,18 @@
 package com.ozone.hollidays.dtos;
 
 import com.ozone.hollidays.entities.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AuthenticationResponse {
-    private String authentication;
-    private String string;
+    private String access_token;
+    private String userName;
+    private String email;
+    private String sex;
+    private String profilePic;
+
 
 }

@@ -1,5 +1,6 @@
 package com.ozone.hollidays.controllers;
 
+import com.ozone.hollidays.dtos.AuthenticationResponse;
 import com.ozone.hollidays.dtos.LoginRequest;
 import com.ozone.hollidays.entities.Response;
 import com.ozone.hollidays.entities.User;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -53,12 +55,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+      return   ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .message("User is authenticated")
-                        .data(of("user", authService.login(loginRequest)))
+                        .message("user is connected")
+                        .data(of("user",authService.login(loginRequest)))
                         .status(OK)
                         .statusCode(OK.value())
                         .build()

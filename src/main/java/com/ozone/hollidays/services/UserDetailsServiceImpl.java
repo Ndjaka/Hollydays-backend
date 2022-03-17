@@ -20,20 +20,20 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-
+    private final static String USER_NOT_FOUND_MSG =    "user with email %s not found";
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional =  userRepository.findByName(username);
-        User user = userOptional.orElseThrow(()->new UsernameNotFoundException("No user Found with username : " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> userOptional =  userRepository.findByEmail(email);
+        User user = userOptional.orElseThrow(()->new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG,email)));
 
         return new org.springframework
                 .security
                 .core
                 .userdetails
                 .User(
-                user.getName(),
+                user.getUserName(),
                 user.getPassword(),
                 user.getEnabled(),
                 true,

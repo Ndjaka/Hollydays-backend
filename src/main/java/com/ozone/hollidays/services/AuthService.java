@@ -12,9 +12,7 @@ import com.ozone.hollidays.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,8 +36,7 @@ public class AuthService {
     public void signup(User registerRequest) {
         User user = new User();
         user.setEmail(registerRequest.getEmail());
-        user.setName(registerRequest.getName());
-        user.setSurName(registerRequest.getSurName());
+        user.setUserName(registerRequest.getUserName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setSex(registerRequest.getSex());
         user.setEnabled(false);
@@ -79,13 +76,21 @@ public class AuthService {
 
     public AuthenticationResponse login(LoginRequest loginRequest) {
 
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new HollydaysException("User not found"));
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                new UsernamePasswordAuthenticationToken(user.getEmail(),
                         loginRequest.getPassword())
         );
 
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
-        return new AuthenticationResponse(token, loginRequest.getUsername());
+        return new AuthenticationResponse().builder()
+                .profilePic(user.getProfilePic())
+                .access_token(token)
+                .sex(user.getSex().name())
+                .email(user.getEmail())
+                .userName(user.getUserName())
+                .build();
     }
 }
