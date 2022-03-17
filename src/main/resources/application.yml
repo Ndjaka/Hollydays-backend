@@ -4,10 +4,10 @@ hollidays:
     # The Camel context name
     name: Hollydays backend
 
+
 logging:
   level:
     root: INFO
-
 mysql:
   service:
     # The name of the service hosting the MySQL database server,
@@ -32,11 +32,12 @@ spring:
   jpa:
     flyway:
       validate-on-migrate: true
-      enabled: true
+      enabled: false
+
 
     hibernate:
       # To be updated in real production usage!
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: false
 
 
@@ -44,9 +45,9 @@ spring:
 
   #default configuration
   mail:
-    host: smtp.mailtrap.io
-    port: 2525
-    username: eadc48f2f6c24f
-    password: 6021821c2967fb
+    host: localhost
+    port: 1025
+    username:
+    password:
     protocol: smtp
 

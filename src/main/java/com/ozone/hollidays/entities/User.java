@@ -1,5 +1,6 @@
 package com.ozone.hollidays.entities;
 
+import com.ozone.hollidays.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,20 +18,21 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "sur_name")
     private String surName;
 
-    @Column(name = "email")
+
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "sex")
-    private Boolean sex;
+    private Gender sex;
 
     @Column(name = "profile_pic")
     private String profilePic;
@@ -39,14 +41,4 @@ public class User {
     private Boolean enabled;
 
 
-
-    public User(String name, String surName, String email, String password, Boolean sex, String profilePic, Boolean enabled) {
-        this.name = name;
-        this.surName = surName;
-        this.email = email;
-        this.password = password;
-        this.sex = sex;
-        this.profilePic = profilePic;
-        this.enabled = enabled;
-    }
 }

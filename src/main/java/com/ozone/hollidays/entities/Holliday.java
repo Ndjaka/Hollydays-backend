@@ -1,5 +1,6 @@
 package com.ozone.hollidays.entities;
 
+import com.ozone.hollidays.enums.StatusType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class Holliday {
     private String date;
 
     @Column(name = "status")
-    private String status;
+    private StatusType status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

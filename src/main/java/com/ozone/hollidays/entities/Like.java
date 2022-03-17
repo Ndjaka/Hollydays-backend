@@ -1,5 +1,6 @@
 package com.ozone.hollidays.entities;
 
+import com.ozone.hollidays.enums.LikesType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class Like {
     private Integer id;
 
     @Column(name = "like_type")
-    private Integer likeType;
+    private LikesType likeType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
