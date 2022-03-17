@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class AuthenticationResponse {
     private String access_token;
     private String userName;
