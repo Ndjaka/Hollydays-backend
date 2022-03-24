@@ -1,4 +1,4 @@
-package com.ozone.hollidays.services;
+package com.ozone.hollidays.services.mailService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

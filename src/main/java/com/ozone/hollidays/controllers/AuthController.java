@@ -1,11 +1,9 @@
 package com.ozone.hollidays.controllers;
 
-import com.ozone.hollidays.dtos.AuthenticationResponse;
 import com.ozone.hollidays.dtos.LoginRequest;
 import com.ozone.hollidays.entities.Response;
 import com.ozone.hollidays.entities.User;
-import com.ozone.hollidays.services.AuthService;
-import org.springframework.http.HttpStatus;
+import com.ozone.hollidays.services.userService.AuthService;
 import org.springframework.http.ResponseEntity;
 
 import static java.time.LocalDateTime.now;
@@ -14,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.OK;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")

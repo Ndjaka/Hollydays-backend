@@ -1,10 +1,9 @@
-package com.ozone.hollidays.services;
+package com.ozone.hollidays.services.mailService;
 
 import com.ozone.hollidays.entities.NotificationEmail;
 import com.ozone.hollidays.exception.HollydaysException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;

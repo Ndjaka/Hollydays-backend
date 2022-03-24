@@ -4,6 +4,10 @@ import com.ozone.hollidays.enums.Gender;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static javax.persistence.FetchType.*;
 
 @Data
 @AllArgsConstructor
@@ -36,5 +40,7 @@ public class User {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @ManyToMany(fetch = EAGER)
+    private Collection<Role> roles = new ArrayList<>();
 
 }

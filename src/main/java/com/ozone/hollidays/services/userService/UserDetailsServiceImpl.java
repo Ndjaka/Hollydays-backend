@@ -1,4 +1,4 @@
-package com.ozone.hollidays.config;
+package com.ozone.hollidays.services.userService;
 
 import com.ozone.hollidays.entities.User;
 import com.ozone.hollidays.repositories.UserRepository;
@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -28,22 +29,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<User> userOptional =  userRepository.findByEmail(email);
         User user = userOptional.orElseThrow(()->new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG,email)));
 
-        return new org.springframework
-                .security
-                .core
-                .userdetails
-                .User(
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(r->{
+            authorities.add(new SimpleGrantedAuthority(r.getName()));
+        });
+        return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),
                 user.getPassword(),
                 user.getEnabled(),
                 true,
                 true,
                  true,
-                getAuthorities("USER")
+                authorities
                );
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(String role){
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
-    }
+
 }

@@ -1,4 +1,4 @@
-package com.ozone.hollidays.services;
+package com.ozone.hollidays.services.userService;
 
 import com.ozone.hollidays.dtos.AuthenticationResponse;
 import com.ozone.hollidays.dtos.LoginRequest;
@@ -9,6 +9,7 @@ import com.ozone.hollidays.exception.HollydaysException;
 import com.ozone.hollidays.repositories.UserRepository;
 import com.ozone.hollidays.repositories.VerificationTokenRepository;
 import com.ozone.hollidays.config.JwtProvider;
+import com.ozone.hollidays.services.mailService.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
