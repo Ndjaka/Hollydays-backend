@@ -1,4 +1,4 @@
-package com.ozone.hollidays.services;
+package com.ozone.hollidays.config;
 
 import com.ozone.hollidays.entities.User;
 import com.ozone.hollidays.repositories.UserRepository;

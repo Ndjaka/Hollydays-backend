@@ -1,6 +1,5 @@
 package com.ozone.hollidays.dtos;
 
-import com.ozone.hollidays.entities.User;
 import lombok.*;
 
 @Data

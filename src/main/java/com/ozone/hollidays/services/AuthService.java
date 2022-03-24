@@ -8,7 +8,7 @@ import com.ozone.hollidays.entities.VerificationToken;
 import com.ozone.hollidays.exception.HollydaysException;
 import com.ozone.hollidays.repositories.UserRepository;
 import com.ozone.hollidays.repositories.VerificationTokenRepository;
-import com.ozone.hollidays.security.JwtProvider;
+import com.ozone.hollidays.config.JwtProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -81,7 +81,6 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(user.getEmail(),
                         loginRequest.getPassword())
         );
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
