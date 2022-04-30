@@ -1,9 +1,10 @@
 package com.ozone.hollidays.controllers;
 
 import com.ozone.hollidays.dtos.LoginRequest;
-import com.ozone.hollidays.entities.Response;
+import com.ozone.hollidays.dtos.RegisterRequest;
+import com.ozone.hollidays.dtos.Response;
 import com.ozone.hollidays.entities.User;
-import com.ozone.hollidays.services.userService.AuthService;
+import com.ozone.hollidays.services.userService.AuthServiceImpl;
 import org.springframework.http.ResponseEntity;
 
 import static java.time.LocalDateTime.now;
@@ -16,16 +17,16 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthServiceImpl authService) {
         this.authService = authService;
     }
 
 
     @PostMapping("/signup")
-    public ResponseEntity<Response> signup(@RequestBody User user) {
-        authService.signup(user);
+    public ResponseEntity<Response> signup(@RequestBody RegisterRequest registerRequest) {
+        authService.signup(registerRequest);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -62,5 +63,9 @@ public class AuthController {
         );
     }
 
+    @GetMapping("/get-connected-user")
+    public User getConnectedUser(){
+        return authService.getCurrentUser();
+    }
 
 }

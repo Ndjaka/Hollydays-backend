@@ -1,4 +1,4 @@
-package com.ozone.hollidays.entities;
+package com.ozone.hollidays.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

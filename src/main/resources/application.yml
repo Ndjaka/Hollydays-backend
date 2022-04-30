@@ -23,6 +23,15 @@ mysql:
 
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 100000000MB
+      max-request-size: 100000000MB
+
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
   # Spring JDBC configuration
   datasource:
     url:      jdbc:mysql://${mysql.service.host}:${mysql.service.port}/${mysql.service.database}
@@ -31,13 +40,12 @@ spring:
 
   # Spring Data JPA configuration
   jpa:
-    flyway:
-      validate-on-migrate: false
-      enabled: false
+#    flyway:
+#      validate-on-migrate: false
+#      enabled: false
 
 
     hibernate:
-      # To be updated in real production usage!
       ddl-auto: update
     show-sql: false
 

@@ -4,6 +4,8 @@ import com.ozone.hollidays.enums.StatusType;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,7 +23,7 @@ public class Holliday {
     private String hotel;
 
     @Column(name = "date", length = 25)
-    private String date;
+    private Instant date;
 
     @Column(name = "status")
     private StatusType status;
@@ -29,5 +31,6 @@ public class Holliday {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
 
 }

@@ -1,6 +1,9 @@
 package com.ozone.hollidays.dtos;
 
+import com.ozone.hollidays.entities.Role;
 import lombok.*;
+
+import java.util.Collection;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +15,7 @@ public class AuthenticationResponse {
     private String email;
     private String sex;
     private String profilePic;
+    private Collection<Role> roles;
 
 
 }
