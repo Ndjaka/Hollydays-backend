@@ -1,17 +1,17 @@
 package com.ozone.hollidays;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ozone.hollidays.entities.Role;
 import com.ozone.hollidays.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
 @EnableAsync
+@EnableSwagger2
 public class HollidaysApplication implements CommandLineRunner {
 
 	@Autowired

@@ -14,8 +14,10 @@ import com.ozone.hollidays.repositories.VerificationTokenRepository;
 import com.ozone.hollidays.config.JwtProvider;
 import com.ozone.hollidays.services.mailService.MailService;
 import com.ozone.hollidays.services.interfaces.AuthService;
+import com.ozone.hollidays.utils.GetProperty;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,15 +25,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
+
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class AuthServiceImpl implements AuthService {
+
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -41,12 +44,15 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
+    private final GetProperty getProperty;
+
+
 
     @Transactional
     @Override
     public void signup(RegisterRequest registerRequest) {
 
-        log.info("user :"+registerRequest);
+        log.info("user :" + registerRequest);
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUserName(registerRequest.getUserName());
@@ -54,18 +60,22 @@ public class AuthServiceImpl implements AuthService {
         user.setSex(registerRequest.getSex());
         user.setEnabled(false);
         userRepository.save(user);
-        addRoleToUser(registerRequest.getUserName(),"USER");
+        addRoleToUser(registerRequest.getUserName(), "USER");
 
         String token = generateVerificationToken(user);
-        mailService.sendMail(new NotificationEmail("Please Activate your Account",
+        String body = String.format("Thank you for signing up to Hollydays, please click on the below url to activate your account :" +
+                " http://localhost:%s/api/v1/auth/accountVerification/" + token, getProperty.getPropertyValue("server.port"));
+
+        mailService.sendMail(new NotificationEmail(
+                "Please Activate your Account",
                 user.getEmail(),
-                "Thank you for signing up to Hollydays, please click on the below url to activate your account :" +
-                        " http://localhost:8888/api/v1/auth/accountVerification/" + token));
+                body
+        ));
     }
 
     @Override
     public User getCurrentUser() {
-            String name = (String) JwtProvider.getJwtInfo().get("name");
+        String name = (String) JwtProvider.getJwtInfo().get("name");
 
         return userRepository.findByUserName(name)
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + name));

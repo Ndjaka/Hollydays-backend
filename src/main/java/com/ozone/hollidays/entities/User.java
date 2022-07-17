@@ -3,7 +3,6 @@ package com.ozone.hollidays.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ozone.hollidays.enums.Gender;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +20,7 @@ public class User {
 
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
+
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;

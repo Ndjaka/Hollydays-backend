@@ -19,7 +19,7 @@ mysql:
     port: 3306
     host: localhost
     username: root
-    password:
+    password: 1234
 
 
 spring:
@@ -59,4 +59,6 @@ spring:
     username:
     password:
     protocol: smtp
-
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

@@ -1,10 +1,7 @@
 package com.ozone.hollidays.config;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -23,6 +20,7 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @AllArgsConstructor
 @Component("SecurityConfig")
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 
     private final UserDetailsService userDetailsService;
@@ -39,7 +37,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     @Override
     public void configure(HttpSecurity http) throws Exception {
          http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-         http.authorizeHttpRequests().antMatchers("/api/v*/auth/**").permitAll();
+         http.authorizeHttpRequests().antMatchers(
+                 "/api/v*/auth/**",
+                 "/swagger-ui/**",
+                 "/swagger-ui.html",
+                 "/v2/api-docs",
+                 "/configuration/ui",
+                 "/swagger-resources/**",
+                 "/configuration/security",
+                 "/webjars/**"
+                 ).permitAll();
+
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.addFilterBefore(new JWTAuthorizationFiler(), UsernamePasswordAuthenticationFilter.class);
     }
