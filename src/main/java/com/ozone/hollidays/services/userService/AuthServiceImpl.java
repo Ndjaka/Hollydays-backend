@@ -1,5 +1,6 @@
 package com.ozone.hollidays.services.userService;
 
+import com.ozone.hollidays.config.JwtProvider;
 import com.ozone.hollidays.dtos.AuthenticationResponse;
 import com.ozone.hollidays.dtos.LoginRequest;
 import com.ozone.hollidays.dtos.RegisterRequest;
@@ -11,13 +12,11 @@ import com.ozone.hollidays.exception.HollydaysException;
 import com.ozone.hollidays.repositories.RoleRepository;
 import com.ozone.hollidays.repositories.UserRepository;
 import com.ozone.hollidays.repositories.VerificationTokenRepository;
-import com.ozone.hollidays.config.JwtProvider;
-import com.ozone.hollidays.services.mailService.MailService;
 import com.ozone.hollidays.services.interfaces.AuthService;
+import com.ozone.hollidays.services.mailService.MailService;
 import com.ozone.hollidays.utils.GetProperty;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
 
         String token = generateVerificationToken(user);
         String body = String.format("Thank you for signing up to Hollydays, please click on the below url to activate your account :" +
-                " http://localhost:%s/api/v1/auth/accountVerification/" + token, getProperty.getPropertyValue("server.port"));
+                "http://localhost:%s/api/v1/auth/accountVerification/" + token, getProperty.getPropertyValue("server.port"));
 
         mailService.sendMail(new NotificationEmail(
                 "Please Activate your Account",

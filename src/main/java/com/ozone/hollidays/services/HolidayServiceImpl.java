@@ -4,11 +4,13 @@ import com.ozone.hollidays.dtos.HollidayDto;
 import com.ozone.hollidays.entities.Comment;
 import com.ozone.hollidays.entities.Holliday;
 import com.ozone.hollidays.entities.Image;
+import com.ozone.hollidays.enums.LikesType;
 import com.ozone.hollidays.enums.StatusType;
 import com.ozone.hollidays.exception.HollydaysException;
 import com.ozone.hollidays.repositories.CommentRepository;
 import com.ozone.hollidays.repositories.HollidayRepository;
 import com.ozone.hollidays.repositories.ImageRepository;
+import com.ozone.hollidays.repositories.LikeRepository;
 import com.ozone.hollidays.services.interfaces.AuthService;
 import com.ozone.hollidays.services.interfaces.HolidayService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,14 +33,16 @@ import java.util.stream.Collectors;
 public class HolidayServiceImpl implements HolidayService {
 
     private final HollidayRepository hollidayRepository;
+    private final LikeRepository likeRepository;
     private final ImageRepository imageRepository;
     private final AuthService authService;
     private final MinIOService minIOService;
 
     private final CommentRepository commentRepository;
 
-    public HolidayServiceImpl(HollidayRepository hollidayRepository, ImageRepository imageRepository, AuthService authService, MinIOService minIOService, CommentRepository commentRepository) {
+    public HolidayServiceImpl(HollidayRepository hollidayRepository, LikeRepository likeRepository, ImageRepository imageRepository, AuthService authService, MinIOService minIOService, CommentRepository commentRepository) {
         this.hollidayRepository = hollidayRepository;
+        this.likeRepository = likeRepository;
         this.imageRepository = imageRepository;
         this.authService = authService;
         this.minIOService = minIOService;
@@ -48,18 +52,23 @@ public class HolidayServiceImpl implements HolidayService {
     @Override
     @Transactional
     public Holliday saveHoliday(Holliday holliday) {
-        Holliday newHoliday = new Holliday();
-        newHoliday.setUser(authService.getCurrentUser());
-        newHoliday.setHotel(holliday.getHotel());
-        newHoliday.setDescription(holliday.getDescription());
-        newHoliday.setDate(Instant.now());
-        newHoliday.setStatus(StatusType.valueOf("ALL_USER"));
-        hollidayRepository.save(newHoliday);
-        return newHoliday;
+        hollidayRepository.save(mapToHoliday(holliday));
+        return mapToHoliday(holliday);
     }
 
     @Override
     @Transactional
+    public Holliday updaTeHoliday(Holliday holliday) {
+        var findHoliday = hollidayRepository.findByIdAndUser(holliday.getId(),authService.getCurrentUser()).orElseThrow(()-> new HollydaysException("Holiday not found"));
+        findHoliday.setId(holliday.getId());
+        findHoliday.setDescription(holliday.getDescription());
+        findHoliday.setHotel(holliday.getHotel());
+        hollidayRepository.save(mapToHoliday(findHoliday));
+        return mapToHoliday(holliday);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Image> saveImagesOfHoliday(Integer id, List<MultipartFile> multipartFiles) {
 
         Optional<Holliday> optionalHoliday = hollidayRepository.findById(id);
@@ -104,6 +113,8 @@ public class HolidayServiceImpl implements HolidayService {
             hollidayDto.setHoliday(holiday);
             hollidayDto.getImages().addAll(images);
             hollidayDto.setComments(comments);
+            hollidayDto.setCommentCount(comments.size());
+            hollidayDto.setLikeCount(likeRepository.findLikesByHollidayAndLikeType(holiday, LikesType.LIKE).size());
             hollidayDtos.add(hollidayDto);
         };
 
@@ -125,6 +136,17 @@ public class HolidayServiceImpl implements HolidayService {
         }
 
         return image1;
+    }
+
+    private Holliday mapToHoliday(Holliday holliday){
+        Holliday newHoliday = new Holliday();
+        newHoliday.setUser(authService.getCurrentUser());
+        newHoliday.setHotel(holliday.getHotel());
+        newHoliday.setDescription(holliday.getDescription());
+        newHoliday.setDate(LocalDateTime.now());
+        newHoliday.setId(newHoliday.getId());
+        newHoliday.setStatus(StatusType.valueOf("ALL_USER"));
+        return newHoliday;
     }
 
 }

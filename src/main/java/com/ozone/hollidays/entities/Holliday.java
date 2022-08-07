@@ -1,11 +1,11 @@
 package com.ozone.hollidays.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ozone.hollidays.enums.StatusType;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.Instant;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -23,7 +23,8 @@ public class Holliday {
     private String hotel;
 
     @Column(name = "date", length = 25)
-    private Instant date;
+    @JsonIgnore
+    private LocalDateTime date;
 
     @Column(name = "status")
     private StatusType status;

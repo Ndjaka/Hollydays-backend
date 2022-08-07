@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface HolidayService {
     public Holliday saveHoliday(Holliday holliday);
+    Holliday updaTeHoliday(Holliday holliday);
     public List<Image> saveImagesOfHoliday(Integer id , List<MultipartFile> multipartFiles);
     public HashMap getHolidays(int page , int per_page);
 }

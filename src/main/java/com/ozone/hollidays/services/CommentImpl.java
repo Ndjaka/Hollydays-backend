@@ -11,6 +11,7 @@ import com.ozone.hollidays.services.interfaces.CommentService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 public class CommentImpl implements CommentService {
@@ -28,10 +29,9 @@ public class CommentImpl implements CommentService {
 
     @Override
     public CommentDto add(CommentDto commentDto) {
-        Holliday holliday = HollidayRepository.getById(commentDto.getHoliday_id());
-        if (holliday == null) new HollydaysException("Can not found Holyday");
+        Optional<Holliday> holliday = Optional.ofNullable(HollidayRepository.findById(commentDto.getHoliday_id()).orElseThrow(() -> new HollydaysException("Holidays not found")));
 
-        commentRepository.save(mapToComment(commentDto.getComment(), holliday));
+        commentRepository.save(mapToComment(commentDto.getComment(), holliday.get()));
 
         return commentDto;
     }

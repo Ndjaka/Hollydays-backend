@@ -1,6 +1,13 @@
 package com.ozone.hollidays.services;
 
 
+import com.ozone.hollidays.config.SecurityParams;
+import io.minio.*;
+import io.minio.errors.*;
+import io.minio.http.Method;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -8,12 +15,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import com.ozone.hollidays.config.SecurityParams;
-import io.minio.*;
-import io.minio.errors.*;
-import io.minio.http.Method;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -87,13 +88,12 @@ public class MinIOService {
         Map<String, String> reqParams = new HashMap<String, String>();
         reqParams.put("response-content-type", "application/json");
 
-        String url = minioClient.getPresignedObjectUrl(
+        return minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
                         .bucket(bucketName)
                         .object(objectUrl)
                         .build());
-        return url;
     }
 
 }
